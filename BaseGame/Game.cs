@@ -1,3 +1,5 @@
+using BaseGame;
+
 namespace BaseFramework
 {
     public abstract class Game
@@ -9,9 +11,9 @@ namespace BaseFramework
         protected Player currentPlayer;
         //protected UndoRedoManager undoRedoManager;
 
-        protected string gameType;
+        protected GameType gameType;
 
-        public Game(string gameType, IBoard board, IGameLogic logic, Player p1, Player p2)
+        public Game(GameType gameType, IBoard board, IGameLogic logic, Player p1, Player p2)
         {
             this.gameType = gameType;
             this.board = board;

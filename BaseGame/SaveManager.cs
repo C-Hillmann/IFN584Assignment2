@@ -1,4 +1,6 @@
 
+using BaseGame;
+
 namespace BaseFramework
 {
     public static class SaveManager
@@ -7,10 +9,10 @@ namespace BaseFramework
         public static Player player2;
         public static Player currentPlayer;
         public static IBoard board;
-        public static string gameType;
+        public static GameType gameType;
 
 
-        public static void SaveGame(string gameType, IBoard board, Player currentPlayer, Player player1, Player player2)
+        public static void SaveGame(GameType gameType, IBoard board, Player currentPlayer, Player player1, Player player2)
         {
             const string FILENAME = "SaveGame.txt";
             const char DELIM = ',';
@@ -38,7 +40,7 @@ namespace BaseFramework
             writer.WriteLine(player1.Name);
             writer.WriteLine(player2.Name);
             
-            if (gameType == "TicTacToe")
+            if (gameType == GameType.TicTacToe)
             {
                 writer.WriteLine(string.Join(DELIM.ToString(), player1.oddNum));
                 writer.WriteLine(string.Join(DELIM.ToString(), player2.evenNum));
@@ -60,12 +62,11 @@ namespace BaseFramework
             FileStream inFile = new FileStream(FILENAME, FileMode.Open, FileAccess.Read);
             StreamReader reader = new StreamReader(inFile);
 
-
-            string gameType = reader.ReadLine();             //  Read game type
+            GameType gameType = GameType.Parse<GameType>(reader.ReadLine());  //  Read game type
             int size = int.Parse(reader.ReadLine());         //  Read board size
 
 
-            IBoard board = CustomGames.CreateBoard(gameType, size);
+            //IBoard board = CustomGames.CreateBoard(gameType, size);
 
             //  Load board state
             string[,] grid = board.boardGrid();
@@ -95,7 +96,7 @@ namespace BaseFramework
             string player1NumsLine = reader.ReadLine();
             string player2NumsLine = reader.ReadLine();
 
-            if (gameType == "TicTacToe")
+            if (gameType == GameType.TicTacToe)
             {
                 string[] p1Fields = player1NumsLine.Split(DELIM, StringSplitOptions.RemoveEmptyEntries);
                 player1.oddNum = Array.ConvertAll(p1Fields, int.Parse);
