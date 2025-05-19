@@ -1,4 +1,5 @@
 using BaseGame;
+using static BaseFramework.Move;
 
 namespace BaseFramework
 {
@@ -69,10 +70,9 @@ namespace BaseFramework
                         }
 
 
-                        gameLogic.MakeMove(move, board);
-
-                        //ICommand command = new PlaceMoveCommand(move);
-                        //undoRedoManager.ExecuteCommand(command, board);
+                        ICommand command = new PlaceMoveCommand(move);
+                        undoRedoManager.SetCommand(command);
+                        undoRedoManager.Execute(board);
 
 
                         board.Display();
