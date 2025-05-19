@@ -1,4 +1,6 @@
 
+using System;
+using System.IO;
 using BaseGame;
 
 namespace BaseFramework
@@ -89,7 +91,7 @@ namespace BaseFramework
 
             
             player1 = new Human(player1Name, true); // odd
-            if (player2Name.ToLower().Contains("Computer"))
+            if (player2Name.ToLower().Contains("computer"))
                 player2 = new Computer(player2Name, false); // even
             else
                 player2 = new Human(player2Name, false);

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BaseFramework
 {
     public interface IGameLogic

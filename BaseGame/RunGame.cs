@@ -1,3 +1,5 @@
+using System;
+
 namespace BaseFramework
 {
     class RunGame
@@ -26,7 +28,7 @@ namespace BaseFramework
                 }
                 else if (SaveManager.gameType == BaseGame.GameType.Gomoku)
                 {
-                    selectedGame = new BaseGame.GomokuGame(SaveManager.board, SaveManager.player1, SaveManager.player2);     //SaveManager.currentPlayer
+                    selectedGame = new BaseGame.GomokuGame(SaveManager.board, SaveManager.player1, SaveManager.player2, SaveManager.currentPlayer);
                 }
                 else
                 {

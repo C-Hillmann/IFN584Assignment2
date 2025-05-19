@@ -20,11 +20,10 @@ namespace BaseGame
         public GomokuGame(IBoard board, Player p1, Player p2) : base(GameType.Gomoku, board, new GomokuGameLogic(), p1, p2)
         {
         }
-        
-        //public GomokuGame(IBoard board, Player p1, Player p2, Player currentPlayer): base(GameType.Gomoku, board, new GomokuGameLogic(), p1, p2, currentPlayer)     //new
-        //{
-            //((GomokuBoard)this.board).Game = this;
-        //}
+
+        public GomokuGame(IBoard board, Player p1, Player p2, Player currentPlayer) : base(GameType.Gomoku, board, new GomokuGameLogic(), p1, p2, currentPlayer)
+        {
+        }
 
         protected override IMove GetInputPrompt()       // make a move
         {
@@ -265,7 +264,7 @@ namespace BaseGame
                 for (int col = 0; col < 15; col++)
                 {
                     string value = board.GetCell(row, col);
-                    if (value == null)
+                    if (value == null || value == "")
                     {
                         openGridspots.Add((row, col));
                     }
@@ -302,12 +301,12 @@ namespace BaseGame
         public bool IsValidMove(IMove move, IBoard board)
         {
             string existingValue = board.GetCell(move.Row, move.Col);
-            if (existingValue != null|| existingValue!="")            //change from null to ""
+            if (existingValue == null || existingValue == "")            //change from null to ""
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         public void MakeMove(IMove move, IBoard board)

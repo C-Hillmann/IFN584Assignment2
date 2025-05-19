@@ -9,7 +9,7 @@ namespace BaseFramework
         protected Player player1;
         protected Player player2;
         protected Player currentPlayer;
-        protected UndoRedoManager undoRedoManager = new UndoRedoManager();;
+        protected UndoRedoManager undoRedoManager = new UndoRedoManager();
 
         protected GameType gameType;
 
@@ -68,8 +68,11 @@ namespace BaseFramework
                             continue;
                         }
 
-                        ICommand command = new PlaceMoveCommand(move);
-                        undoRedoManager.ExecuteCommand(command, board);
+
+                        gameLogic.MakeMove(move, board);
+
+                        //ICommand command = new PlaceMoveCommand(move);
+                        //undoRedoManager.ExecuteCommand(command, board);
 
 
                         board.Display();
