@@ -9,24 +9,24 @@ namespace BaseFramework
             Console.WriteLine("Type 'y' to load a saved game, or 'n' to start a new game.");
 
             string statusChoice = Console.ReadLine().ToLower();
-            Game selectedGame;
+            Game selectedGame = null;
 
             if (statusChoice == "y")
             {
                 // Load saved game
                 SaveManager.LoadGame();
 
-                if (SaveManager.gameType == "TicTacToe")
+                if (SaveManager.gameType == BaseGame.GameType.TicTacToe)
                 {
-                    selectedGame = new TicTacToeGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
+                    //selectedGame = new TicTacToeGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
                 }
-                else if (SaveManager.gameType == "Notakto")
+                else if (SaveManager.gameType == BaseGame.GameType.Notakto)
                 {
-                    selectedGame = new NotaktoGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
+                    //selectedGame = new NotaktoGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
                 }
-                else if (SaveManager.gameType == "Gomoku")
+                else if (SaveManager.gameType == BaseGame.GameType.Gomoku)
                 {
-                    selectedGame = new GomokuGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
+                    selectedGame = new BaseGame.GomokuGame(SaveManager.board, SaveManager.player1, SaveManager.player2);     //SaveManager.currentPlayer
                 }
                 else
                 {
@@ -72,15 +72,15 @@ namespace BaseFramework
                 // Game choice
                 if (gameChoice == "1")
                 {
-                    selectedGame = new TicTacToeGame();
+                    //selectedGame = new TicTacToeGame();
                 }
                 else if (gameChoice == "2")
                 {
-                    selectedGame = new NotaktoGame();
+                    //selectedGame = new NotaktoGame();
                 }
                 else if (gameChoice == "3")
                 {
-                    selectedGame = new GomokuGame();
+                    selectedGame = new BaseGame.GomokuGame(player1, player2);
                 }
                 else
                 {
@@ -89,8 +89,11 @@ namespace BaseFramework
                 }
             }
 
-            // Start the game
-            selectedGame.GamePlay();
+            if (selectedGame != null)
+            {
+                // Start the game
+                selectedGame.GamePlay();
+            }
         }
     }
 }
