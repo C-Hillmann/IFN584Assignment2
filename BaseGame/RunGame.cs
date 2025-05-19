@@ -26,7 +26,7 @@ namespace BaseFramework
                 }
                 else if (SaveManager.gameType == BaseGame.GameType.Gomoku)
                 {
-                    //selectedGame = new GomokuGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
+                    selectedGame = new BaseGame.GomokuGame(SaveManager.board, SaveManager.player1, SaveManager.player2);     //SaveManager.currentPlayer
                 }
                 else
                 {

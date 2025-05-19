@@ -32,7 +32,8 @@ namespace BaseGame
             {
                 for (int col = 0; col < Size; col++)
                 {
-                    if (grid[row, col] == null)
+                    var cellValue = grid[row, col];
+                    if ((cellValue == null) || cellValue == "")
                     {
                         Console.Write(" ");
                     }

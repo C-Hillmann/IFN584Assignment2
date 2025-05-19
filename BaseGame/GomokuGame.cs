@@ -16,11 +16,17 @@ namespace BaseGame
             ((GomokuBoard) this.board).Game = this;
         }
 
+        
         public GomokuGame(IBoard board, Player p1, Player p2) : base(GameType.Gomoku, board, new GomokuGameLogic(), p1, p2)
         {
         }
+        
+        //public GomokuGame(IBoard board, Player p1, Player p2, Player currentPlayer): base(GameType.Gomoku, board, new GomokuGameLogic(), p1, p2, currentPlayer)     //new
+        //{
+            //((GomokuBoard)this.board).Game = this;
+        //}
 
-        protected override IMove GetInputPrompt()
+        protected override IMove GetInputPrompt()       // make a move
         {
             if (currentPlayer is Human)
             {
@@ -39,8 +45,30 @@ namespace BaseGame
             }
             else
             {
-                // Derive the next move
-                return null;
+                // Derive the next move for AI player
+                Move winMove = CheckRows(board);
+                if (winMove == null)
+                {
+                    winMove = CheckCols(board);
+                }
+                if (winMove == null)
+                {
+                    winMove = CheckDiagRight(board);
+                }
+                if (winMove == null)
+                { 
+                    winMove = CheckDiagLeft(board);
+                }
+
+
+                if (winMove != null) 
+                {
+                    return winMove;
+                }
+                else
+                {
+                    return RandomMove(board);
+                }
             }
         }
 
@@ -54,6 +82,200 @@ namespace BaseGame
                 return "W";
             }
         }
+
+        private Move CheckRows(IBoard board)
+        {
+            for (int row = 0; row < 15; row++)
+            {
+                for (int col = 0; col < 11; col++)
+                {
+                    List<(int, int)> positions = new List<(int, int)>();
+
+                    int countAi = 0, emptyCount = 0;
+
+                    for (int k = 0; k < 5; k++)
+                    {
+                        string cell = board.GetCell(row, col+ k);
+                        positions.Add((row, col + k));
+
+                        if (cell == deterimePlayerColour(currentPlayer))
+                        {
+                            countAi++;
+                        }
+                        else if (cell == " ")
+                        { 
+                            emptyCount++;
+                        }
+                    }
+
+                    //if 4 W's and 1 empty in block of 5
+                    if (countAi == 4 && emptyCount == 1)
+                    {
+                        foreach (var pos in positions)
+                        {
+                            if (board.GetCell(pos.Item1, pos.Item2) == " ")
+                            {
+                                return new Move(pos.Item1, pos.Item2, deterimePlayerColour(currentPlayer), currentPlayer);
+                            }
+                        }
+                    
+                    }
+                
+                }
+            
+            }
+            return null;
+        }
+
+        private Move CheckCols(IBoard board)
+        { 
+            for(int col = 0; col < 15;col++)
+            {
+                for (int row = 0; row < 11; row++)
+                {
+                    List<(int, int)> positions = new List<(int, int)>();
+
+                    int countAi = 0, emptyCount = 0;
+
+                    for (int k = 0; k < 5; k++)
+                    {
+                        string cell = board.GetCell(row + k, col);
+                        positions.Add((row + k, col));
+
+                        if (cell == deterimePlayerColour(currentPlayer))
+                        {
+                            countAi++;
+                        }
+                        else if (cell == " ")
+                        {
+                            emptyCount++;
+                        }
+                    }
+
+                    //if 4 W's and 1 empty in block of 5
+                    if (countAi == 4 && emptyCount == 1)
+                    {
+                        foreach (var pos in positions)
+                        {
+                            if (board.GetCell(pos.Item1, pos.Item2) == " ")
+                            {
+                                return new Move(pos.Item1, pos.Item2, deterimePlayerColour(currentPlayer), currentPlayer);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+            return null;
+        }
+
+        private Move CheckDiagRight(IBoard board)
+        {
+            for (int row = 0; row < 11; row++)
+            {
+                for (int col = 0; col < 11; col++)
+                {
+                    List<(int, int)> positions = new List<(int, int)>();
+
+                    int countAi = 0, emptyCount = 0;
+                    for (int k = 0; k < 5; k++)
+                    {
+                        string cell = board.GetCell(row + k, col +k);
+                        positions.Add((row + k, col+k));
+
+                        if (cell == deterimePlayerColour(currentPlayer))
+                        {
+                            countAi++;
+                        }
+                        else if (cell == "  ")
+                        {
+                            emptyCount++;
+                        }
+                    }
+                    //if 4 W's and 1 empty in block of 5
+                    if (countAi == 4 && emptyCount == 1)
+                    {
+                        foreach (var pos in positions)
+                        {
+                            if (board.GetCell(pos.Item1, pos.Item2) == "  ")
+                            {
+                                return new Move(pos.Item1, pos.Item2, deterimePlayerColour(currentPlayer), currentPlayer);
+                            }
+                        }
+
+                    }
+                }
+            
+            }
+            return null;
+        }
+
+        private Move CheckDiagLeft(IBoard board)    //top right to bottom left
+        {
+            for (int row = 0; row < 11; row++)
+            {
+                for (int col = 14; col !< 4; col--)
+                {
+                    List<(int, int)> positions = new List<(int, int)>();
+
+                    int countAi = 0, emptyCount = 0;
+
+                    for (int k = 0; k < 5; k++)
+                    {
+                        string cell = board.GetCell(row - k, col - k);
+                        positions.Add((row - k, col - k));
+
+                        if (cell == deterimePlayerColour(currentPlayer))
+                        {
+                            countAi++;
+                        }
+                        else if (cell == "  ")
+                        {
+                            emptyCount++;
+                        }
+                    }
+                    //if 4 W's and 1 empty in block of 5
+                    if (countAi == 4 && emptyCount == 1)
+                    {
+                        foreach (var pos in positions)
+                        {
+                            if (board.GetCell(pos.Item1, pos.Item2) == "  ")
+                            {
+                                return new Move(pos.Item1, pos.Item2, deterimePlayerColour(currentPlayer), currentPlayer);
+                            }
+                        }
+
+                    }
+                }
+            
+            }
+            return null;
+        }
+        private Move RandomMove(IBoard board)
+        {
+            Random randnumber = new Random();
+
+            List<(int, int)> openGridspots = new List<(int, int)>();
+
+            // puts all open grid spots in list
+            for (int row = 0; row < 15; row++)
+            {
+                for (int col = 0; col < 15; col++)
+                {
+                    string value = board.GetCell(row, col);
+                    if (value == null)
+                    {
+                        openGridspots.Add((row, col));
+                    }
+                }
+            }
+            //randomly select a number in the open spots list
+            int selectOpengrid = randnumber.Next(0, openGridspots.Count);
+            return new Move(openGridspots[selectOpengrid].Item1, openGridspots[selectOpengrid].Item2, deterimePlayerColour(currentPlayer), currentPlayer);
+        }
+
     }
 
     public class GomokuGameLogic : IGameLogic
@@ -61,21 +283,10 @@ namespace BaseGame
         private bool gameOver = false;
         public bool CheckWin(IMove lastMove, IBoard board)
         {
-            for (int row = 0; row < 11; row++)
-            {
-                for (int col = 0; col < 11; col++)
-                {
-                    if (testHorizontal(board, lastMove, row, col)
-                        || testVeritcal(board, lastMove, row, col)
-                        || testDiagonalDownRight(board, lastMove, row, col)
-                        || testDiagonalDownLeft(board, lastMove, row, col))
-                    {
-                        return true;
-                    }
-                }
-
-            }
-            return false;
+            return testHorizontal(board, lastMove)
+                    || testVertical(board, lastMove)
+                    || testDiagonal1(board, lastMove)
+                    || testDiagonal2(board, lastMove);
         }
 
         public List<IMove> GetAvailableMoves(IBoard board)
@@ -91,7 +302,7 @@ namespace BaseGame
         public bool IsValidMove(IMove move, IBoard board)
         {
             string existingValue = board.GetCell(move.Row, move.Col);
-            if (existingValue != null)
+            if (existingValue != null|| existingValue!="")            //change from null to ""
             {
                 return false;
             }
@@ -104,54 +315,108 @@ namespace BaseGame
             board.SetCell(move.Row, move.Col, move.Value);
         }
 
-        private bool testHorizontal(IBoard board, IMove move, int row, int col)
+        private bool testHorizontal(IBoard board, IMove move)
         {
-            // Test to see if there are 5 of the same values in the move to the right of the row/col
-            return 
-                board.GetCell(row, col) == move.Value
-                && board.GetCell(row, col + 1) == move.Value
-                && board.GetCell(row, col + 2) == move.Value
-                && board.GetCell(row, col + 3) == move.Value
-                && board.GetCell(row, col + 4) == move.Value
-            ;
-        }
+            // Test to see if there are 5 of the same values horinzontally across the row
+            var matchingCells = new List<(int, int)>();
 
-        private bool testVeritcal(IBoard board, IMove move, int row, int col)
-        {
-            // Test to see if there are 5 of the same values in the move to the bottom of the row/col
-            return
-                board.GetCell(row, col) == move.Value
-                && board.GetCell(row + 1, col) == move.Value
-                && board.GetCell(row + 2, col) == move.Value
-                && board.GetCell(row + 3, col) == move.Value
-                && board.GetCell(row + 4, col) == move.Value
-            ;
-        }
-
-        private bool testDiagonalDownRight(IBoard board, IMove move, int row, int col)
-        {
-            return
-                board.GetCell(row, col) == move.Value
-                && board.GetCell(row + 1, col + 1) == move.Value
-                && board.GetCell(row + 2, col + 2) == move.Value
-                && board.GetCell(row + 3, col + 3) == move.Value
-                && board.GetCell(row + 4, col + 4) == move.Value
-            ;
-        }
-
-        private bool testDiagonalDownLeft(IBoard board, IMove move, int row, int col)
-        {
-            if (col < 4)
+            matchingCells.Add((move.Row, move.Col));
+            // look to the right of the move
+            int idx = move.Col + 1;
+            while (idx < 15 && board.GetCell(move.Row, idx) == move.Value)
             {
-                return false;
+                matchingCells.Add((move.Row, idx));
+                idx++;
             }
-            return
-                board.GetCell(row, col) == move.Value
-                && board.GetCell(row + 1, col - 1) == move.Value
-                && board.GetCell(row + 2, col - 2) == move.Value
-                && board.GetCell(row + 3, col - 3) == move.Value
-                && board.GetCell(row + 4, col - 4) == move.Value
-            ;
+            // look to the left of the move
+            idx = move.Col - 1;
+            while (idx >= 0 && board.GetCell(move.Row, idx) == move.Value)
+            {
+                matchingCells.Add((move.Row, idx));
+                idx--;
+            }
+
+            return matchingCells.Count > 4;
+        }
+
+        private bool testVertical(IBoard board, IMove move)
+        {
+            // Test to see if there are 5 of the same values vertically across the column
+            var matchingCells = new List<(int, int)>();
+
+            matchingCells.Add((move.Row, move.Col));
+            // look below the move
+            int idx = move.Row + 1;
+            while (idx < 15 && board.GetCell(idx, move.Col) == move.Value)
+            {
+                matchingCells.Add((idx, move.Col));
+                idx++;
+            }
+            // look above the move
+            idx = move.Row - 1;
+            while (idx >= 0 && board.GetCell(idx, move.Col) == move.Value)
+            {
+                matchingCells.Add((idx, move.Col));
+                idx--;
+            }
+
+            return matchingCells.Count > 4;
+        }
+
+        private bool testDiagonal1(IBoard board, IMove move)
+        {
+            // Test to see if there are 5 of the same values diagonally down/right
+            var matchingCells = new List<(int, int)>();
+
+            matchingCells.Add((move.Row, move.Col));
+            // look below the move
+            int rowIdx = move.Row + 1;
+            int colIdx = move.Col + 1;
+            while (rowIdx < 15 && colIdx < 15 && board.GetCell(rowIdx, colIdx) == move.Value)
+            {
+                matchingCells.Add((rowIdx, colIdx));
+                rowIdx++;
+                colIdx++;
+            }
+            // look in the other direction
+            rowIdx = move.Row - 1;
+            colIdx = move.Col - 1;
+            while (rowIdx >= 0 && colIdx >= 0 && board.GetCell(rowIdx, colIdx) == move.Value)
+            {
+                matchingCells.Add((rowIdx, colIdx));
+                rowIdx--;
+                colIdx--;
+            }
+
+            return matchingCells.Count > 4;
+        }
+
+        private bool testDiagonal2(IBoard board, IMove move)
+        {
+            // Test to see if there are 5 of the same values diagonally up/right
+            var matchingCells = new List<(int, int)>();
+
+            matchingCells.Add((move.Row, move.Col));
+            // look above the move
+            int rowIdx = move.Row - 1;
+            int colIdx = move.Col + 1;
+            while (rowIdx >= 0 && colIdx < 15 && board.GetCell(rowIdx, colIdx) == move.Value)
+            {
+                matchingCells.Add((rowIdx, colIdx));
+                rowIdx--;
+                colIdx++;
+            }
+            // look in the other direction
+            rowIdx = move.Row + 1;
+            colIdx = move.Col - 1;
+            while (rowIdx < 15 && colIdx >= 0 && board.GetCell(rowIdx, colIdx) == move.Value)
+            {
+                matchingCells.Add((rowIdx, colIdx));
+                rowIdx++;
+                colIdx--;
+            }
+
+            return matchingCells.Count > 4;
         }
 
     }

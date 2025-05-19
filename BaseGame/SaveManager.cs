@@ -39,7 +39,9 @@ namespace BaseFramework
             // Save player 1 & 2
             writer.WriteLine(player1.Name);
             writer.WriteLine(player2.Name);
-            
+            //1st players always human, so check if 2nd player is comp or human
+            //writer.WriteLine(player2 is Computer ? "AI" : "Human");
+
             if (gameType == GameType.TicTacToe)
             {
                 writer.WriteLine(string.Join(DELIM.ToString(), player1.oddNum));
@@ -62,11 +64,11 @@ namespace BaseFramework
             FileStream inFile = new FileStream(FILENAME, FileMode.Open, FileAccess.Read);
             StreamReader reader = new StreamReader(inFile);
 
-            GameType gameType = GameType.Parse<GameType>(reader.ReadLine());  //  Read game type
+            gameType = GameType.Parse<GameType>(reader.ReadLine());  //  Read game type
             int size = int.Parse(reader.ReadLine());         //  Read board size
 
 
-            //IBoard board = CustomGames.CreateBoard(gameType, size);
+            board = CustomGames.CreateBoard(gameType, size);
 
             //  Load board state
             string[,] grid = board.boardGrid();
@@ -87,17 +89,19 @@ namespace BaseFramework
 
             
             player1 = new Human(player1Name, true); // odd
-            if (player2Name.ToLower().Contains("computer"))
+            if (player2Name.ToLower().Contains("Computer"))
                 player2 = new Computer(player2Name, false); // even
             else
                 player2 = new Human(player2Name, false);
 
-            // only needed for TicTacToe
-            string player1NumsLine = reader.ReadLine();
-            string player2NumsLine = reader.ReadLine();
+            
+            
 
             if (gameType == GameType.TicTacToe)
             {
+                string player1NumsLine = reader.ReadLine();
+                string player2NumsLine = reader.ReadLine();
+
                 string[] p1Fields = player1NumsLine.Split(DELIM, StringSplitOptions.RemoveEmptyEntries);
                 player1.oddNum = Array.ConvertAll(p1Fields, int.Parse);
 

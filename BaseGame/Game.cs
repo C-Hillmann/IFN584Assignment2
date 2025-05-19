@@ -24,6 +24,20 @@ namespace BaseFramework
             
         }
 
+        public Game(GameType gameType, IBoard board, IGameLogic logic, Player p1, Player p2, Player currentPlayer)  //new
+        {
+            this.gameType = gameType;
+            this.board = board;
+            this.gameLogic = logic;
+            this.player1 = p1;
+            this.player2 = p2;
+
+            if (currentPlayer != p1 && currentPlayer != p2)
+                throw new ArgumentException("Current player must be either player1 or player2.");
+
+            this.currentPlayer = currentPlayer;
+        }
+
         public void GamePlay()
         {
             Console.Clear();
@@ -32,32 +46,50 @@ namespace BaseFramework
 
             while (!gameLogic.IsGameOver())
             {
-                Console.WriteLine($"\n{currentPlayer.Name}'s turn:");
-                IMove move = GetInputPrompt();
+                Console.WriteLine("Press m to make next move, type save to save current game, or type help to view help menu");
+                string input = Console.ReadLine();
 
-                if (move == null)
+                switch (input)
                 {
-                    Console.WriteLine("Invalid input or command.");
-                    continue;
+                    case "m":
+                        Console.WriteLine($"\n{currentPlayer.Name}'s turn:");
+                        IMove move = GetInputPrompt();
+
+                        if (move == null)
+                        {
+                            Console.WriteLine("Invalid input or command.");
+                            continue;
+                        }
+
+                        if (!gameLogic.IsValidMove(move, board))
+                        {
+                            Console.WriteLine("Invalid move. Try again.");
+                            continue;
+                        }
+
+                        gameLogic.MakeMove(move, board);
+
+                        board.Display();
+
+                        if (gameLogic.CheckWin(move, board))
+                        {
+                            Console.WriteLine($"\n {currentPlayer.Name} wins!");
+                            break;
+                        }
+
+                        PlayerTurn();
+                        break;
+
+                    case "save":
+                        Save();
+
+                        break;
+
+                    case "help":
+                        HelpMenu(); break;
+
                 }
-
-                if (!gameLogic.IsValidMove(move, board))
-                {
-                    Console.WriteLine("Invalid move. Try again.");
-                    continue;
-                }
-
-                gameLogic.MakeMove(move, board);
-                
-                board.Display();
-
-                if (gameLogic.CheckWin(move, board))
-                {
-                    Console.WriteLine($"\n {currentPlayer.Name} wins!");
-                    break;
-                }
-
-                PlayerTurn();
+ 
             }
 
             Console.WriteLine("\n Game Over");
