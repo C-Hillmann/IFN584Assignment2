@@ -9,7 +9,7 @@ namespace BaseFramework
         protected Player player1;
         protected Player player2;
         protected Player currentPlayer;
-        //protected UndoRedoManager undoRedoManager;
+        protected UndoRedoManager undoRedoManager = new UndoRedoManager();;
 
         protected GameType gameType;
 
@@ -22,9 +22,10 @@ namespace BaseFramework
             this.player2 = p2;
             this.currentPlayer = p1;
             
+            
         }
 
-        public Game(GameType gameType, IBoard board, IGameLogic logic, Player p1, Player p2, Player currentPlayer)  //new
+        public Game(GameType gameType, IBoard board, IGameLogic logic, Player p1, Player p2, Player currentPlayer)  //saved Game
         {
             this.gameType = gameType;
             this.board = board;
@@ -67,7 +68,9 @@ namespace BaseFramework
                             continue;
                         }
 
-                        gameLogic.MakeMove(move, board);
+                        ICommand command = new PlaceMoveCommand(move);
+                        undoRedoManager.ExecuteCommand(command, board);
+
 
                         board.Display();
 
@@ -79,6 +82,17 @@ namespace BaseFramework
 
                         PlayerTurn();
                         break;
+
+                    case "undo":
+                        undoRedoManager.Undo(board);
+                        board.Display();
+                        break;
+
+                    case "redo":
+                        undoRedoManager.Redo(board);
+                        board.Display();
+                        break;
+
 
                     case "save":
                         Save();

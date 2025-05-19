@@ -1,25 +1,31 @@
-
 namespace BaseFramework
 {
     public class UndoRedoManager
     {
-        private Stack<ICommand> undoStack = new Stack<ICommand>();
-        private Stack<ICommand> redoStack = new Stack<ICommand>();
+        private ICommand lastCommand;   
+        private ICommand redoCommand;   
 
-        public void ExecuteCommand(ICommand command, IBoard board)
+        public void SetCommand(ICommand command)
         {
-            command.Execute(board);
-            undoStack.Push(command);
-            redoStack.Clear();
+            lastCommand = command;
+        }
+
+        public void Execute(IBoard board)
+        {
+            if (lastCommand != null)
+            {
+                lastCommand.Execute(board);
+                redoCommand = null; 
+            }
         }
 
         public void Undo(IBoard board)
         {
-            if (undoStack.Count > 0)
+            if (lastCommand != null)
             {
-                ICommand command = undoStack.Pop();
-                command.Undo(board);
-                redoStack.Push(command);
+                lastCommand.Undo(board);
+                redoCommand = lastCommand;  // Save for redo
+                lastCommand = null;
                 Console.WriteLine("Undo performed.");
             }
             else
@@ -30,23 +36,17 @@ namespace BaseFramework
 
         public void Redo(IBoard board)
         {
-            if (redoStack.Count > 0)
+            if (redoCommand != null)
             {
-                ICommand command = redoStack.Pop();
-                command.Execute(board);
-                undoStack.Push(command);
+                redoCommand.Execute(board);
+                lastCommand = redoCommand;
+                redoCommand = null;
                 Console.WriteLine("Redo performed.");
             }
             else
             {
                 Console.WriteLine("Nothing to redo.");
             }
-        }
-
-        public void Clear()
-        {
-            undoStack.Clear();
-            redoStack.Clear();
         }
     }
 }
