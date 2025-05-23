@@ -22,8 +22,8 @@ namespace BaseFramework
             this.player1 = p1;
             this.player2 = p2;
             this.currentPlayer = p1;
-            
-            
+
+
         }
 
         public Game(GameType gameType, IBoard board, IGameLogic logic, Player p1, Player p2, Player currentPlayer)  //saved Game
@@ -79,8 +79,16 @@ namespace BaseFramework
 
                         if (gameLogic.CheckWin(move, board))
                         {
-                            Console.WriteLine($"\n {currentPlayer.Name} wins!");
-                            break;
+                            if (gameLogic is NotaktoGameLogic notaktoGameLogic)
+                            {
+                                Console.WriteLine($"\n {notaktoGameLogic.GetLoser().Name} loses!");
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"\n {currentPlayer.Name} wins!");
+                                break;
+                            }
                         }
 
                         PlayerTurn();
@@ -106,7 +114,7 @@ namespace BaseFramework
                         HelpMenu(); break;
 
                 }
- 
+
             }
 
             Console.WriteLine("\n Game Over");
@@ -124,7 +132,7 @@ namespace BaseFramework
             }
 
         }
-        
+
 
         protected void Save()
         {
@@ -146,7 +154,7 @@ namespace BaseFramework
             Console.WriteLine("- Enter 'help' to view this help menu again\n");
         }
 
-        
+
         protected abstract IMove GetInputPrompt();
     }
 }

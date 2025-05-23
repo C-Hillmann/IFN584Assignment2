@@ -84,7 +84,32 @@ namespace BaseGame
         private Player loser = null;
         public bool CheckWin(IMove lastMove, IBoard board)
         {
-            return gameOver;
+            var move = lastMove as NotaktoMove;
+            var compositeBoard = board as CompositeNotaktoBoard;
+            if (move == null || compositeBoard == null) return false;
+
+            int boardIndex = move.ColumnIndex / 3;
+            var individualBoard = compositeBoard.Boards[boardIndex];
+
+            if (individualBoard.IsCompleted())
+            {
+                Console.WriteLine($"Board {boardIndex + 1} is now completed.");
+
+                if (compositeBoard.isAllCompleted())
+                {
+                    Console.WriteLine("All boards are completed.");
+                    gameOver = true;
+                    loser = move.Player;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        public Player GetLoser()
+        {
+            return loser;
         }
 
         public bool IsGameOver() => gameOver;
@@ -117,6 +142,7 @@ namespace BaseGame
 
         public void MakeMove(IMove move, IBoard board)
         {
+            Console.WriteLine("Went in MakeMove");
             var notaktoMove = move as NotaktoMove;
             var compositeBoard = board as CompositeNotaktoBoard;
 
@@ -130,6 +156,7 @@ namespace BaseGame
             if (compositeBoard.isAllCompleted())
             {
                 gameOver = true;
+                Console.WriteLine("Went in All Complete gameover is : " + gameOver);
                 loser = move.Player;
             }
 
