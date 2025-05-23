@@ -1,4 +1,3 @@
-
 using System;
 using System.IO;
 using BaseGame;
@@ -54,7 +53,7 @@ namespace BaseFramework
                 writer.WriteLine(""); // placeholder for Notakto
                 writer.WriteLine(""); // placeholder for Gomoku
             }
-            
+
             writer.Close();
 
         }
@@ -89,15 +88,15 @@ namespace BaseFramework
             string player1Name = reader.ReadLine();
             string player2Name = reader.ReadLine();
 
-            
+
             player1 = new Human(player1Name, true); // odd
             if (player2Name.ToLower().Contains("computer"))
                 player2 = new Computer(player2Name, false); // even
             else
                 player2 = new Human(player2Name, false);
 
-            
-            
+
+
 
             if (gameType == GameType.TicTacToe)
             {
@@ -126,8 +125,8 @@ namespace BaseFramework
 
             Console.WriteLine("Game successfully loaded!");
 
-            
-            
+
+
         }
     }
 }
