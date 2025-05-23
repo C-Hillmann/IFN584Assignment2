@@ -282,10 +282,16 @@ namespace BaseGame
         private bool gameOver = false;
         public bool CheckWin(IMove lastMove, IBoard board)
         {
-            return testHorizontal(board, lastMove)
+            bool returnValue = testHorizontal(board, lastMove)
                     || testVertical(board, lastMove)
                     || testDiagonal1(board, lastMove)
                     || testDiagonal2(board, lastMove);
+
+            if (returnValue)
+            {
+                gameOver = true;
+            }
+            return returnValue;
         }
 
         public List<IMove> GetAvailableMoves(IBoard board)
