@@ -39,7 +39,7 @@ namespace BaseGame
                     string? currentValue;
                     if (string.IsNullOrWhiteSpace(board[row, column]))
                     {
-                        currentValue = ".";
+                        currentValue = "0";
                     }
                     else
                     {

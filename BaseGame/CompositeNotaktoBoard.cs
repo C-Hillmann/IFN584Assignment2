@@ -51,7 +51,7 @@ public class CompositeNotaktoBoard : IBoard
                     var individualCell = Boards[boardIndex].GetCell(row, column);
                     if (string.IsNullOrWhiteSpace(individualCell))
                     {
-                        Console.Write(".");
+                        Console.Write("0");
                     }
                     else
                     {
