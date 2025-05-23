@@ -21,7 +21,7 @@ namespace BaseGame
                         {
                             if (string.IsNullOrWhiteSpace(individualBoard.GetCell(row, column)))
                             {
-                                return new NotaktoMove(-1, row, boardIndex * 3 + column, "X", currentPlayer);
+                                return new NotaktoMove(-1, row, (boardIndex * 3) + column, "X", currentPlayer);
                             }
                         }
                     }
@@ -55,7 +55,7 @@ namespace BaseGame
             }
         }
 
-        public NotaktoGame(IBoard board, Player currentPlayer, Player player1, Player player2) : base(GameType.Notakto, new CompositeNotaktoBoard(), new NotaktoGameLogic(), player1, player2)
+        public NotaktoGame(IBoard board, Player currentPlayer, Player player1, Player player2) : base(GameType.Notakto, board, new NotaktoGameLogic(), player1, player2, currentPlayer)
         {
             var compositeNotaktoBoard = this.board as CompositeNotaktoBoard;
             for (int i = 0; i < 3; i++)

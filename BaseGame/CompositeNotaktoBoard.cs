@@ -65,14 +65,20 @@ public class CompositeNotaktoBoard : IBoard
         Console.WriteLine();
     }
 
-    public string GetCell(int row, int col) // col / 3 to get board number and col remainder 3 to get specific column index for each board.
+    public string GetCell(int row, int col)
     {
-        return Boards[col / 3].GetCell(row, col % 3);
+        int boardIndex = col / 3;
+        int localRow = row % 3;
+        int localCol = col % 3;
+        return Boards[boardIndex].GetCell(localRow, localCol);
     }
 
     public void SetCell(int row, int col, string value)
     {
-        Boards[col / 3].SetCell(row, col % 3, value);
+        int boardIndex = col / 3;
+        int localRow = row % 3;
+        int localCol = col % 3;
+        Boards[boardIndex].SetCell(localRow, localCol, value);
     }
 
     public bool isAllCompleted()

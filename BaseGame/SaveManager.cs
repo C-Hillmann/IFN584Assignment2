@@ -24,14 +24,33 @@ namespace BaseFramework
             writer.WriteLine(board.Size);          // Save board size
 
             // Save board grid
-            string[,] grid = board.boardGrid();
-            for (int i = 0; i < board.Size; i++)
+            if (gameType == GameType.Notakto)
             {
-                for (int j = 0; j < board.Size; j++)
+                CompositeNotaktoBoard compositeBoard = (CompositeNotaktoBoard)board;
+                foreach (var individualBoard in compositeBoard.Boards)
                 {
-                    writer.Write(grid[i, j] + DELIM);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        for (int j = 0; j < 3; j++)
+                        {
+                            writer.Write(individualBoard.GetCell(i, j) + DELIM);
+                        }
+                        writer.WriteLine();
+                    }
                 }
-                writer.WriteLine();
+            }
+
+            else
+            {
+                string[,] grid = board.boardGrid();
+                for (int i = 0; i < board.Size; i++)
+                {
+                    for (int j = 0; j < board.Size; j++)
+                    {
+                        writer.Write(grid[i, j] + DELIM);
+                    }
+                    writer.WriteLine();
+                }
             }
 
             // Saving current player
@@ -72,13 +91,34 @@ namespace BaseFramework
             board = CustomGames.CreateBoard(gameType, size);
 
             //  Load board state
-            string[,] grid = board.boardGrid();
-            for (int i = 0; i < size; i++)
+            if (gameType == GameType.Notakto)
             {
-                string[] row = reader.ReadLine().Split(DELIM);
-                for (int j = 0; j < size; j++)
+                CompositeNotaktoBoard compositeBoard = board as CompositeNotaktoBoard;
+                for (int boardIndex = 0; boardIndex < 3; boardIndex++)
                 {
-                    board.SetCell(i, j, row[j]);
+                    for (int row = 0; row < 3; row++)
+                    {
+                        var line = reader.ReadLine();
+                        string[] cells = line.Split(DELIM, StringSplitOptions.None);
+
+                        for (int col = 0; col < 3; col++)
+                        {
+                            compositeBoard.Boards[boardIndex].SetCell(row, col, cells[col]);
+                        }
+                    }
+                }
+            }
+
+            else
+            {
+                string[,] grid = board.boardGrid();
+                for (int i = 0; i < size; i++)
+                {
+                    string[] row = reader.ReadLine().Split(DELIM);
+                    for (int j = 0; j < size; j++)
+                    {
+                        board.SetCell(i, j, row[j]);
+                    }
                 }
             }
 
