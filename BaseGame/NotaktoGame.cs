@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using BaseFramework;
 
 namespace BaseGame
@@ -11,21 +12,13 @@ namespace BaseGame
             var compositeBoard = (CompositeNotaktoBoard)this.board;
             if (!(currentPlayer is Human))
             {
-                for (int boardIndex = 0; boardIndex < 3; boardIndex++)
-                {
-                    var individualBoard = compositeBoard.Boards[boardIndex];
-                    if (individualBoard.IsCompleted()) continue;
-                    for (int row = 0; row < 3; row++)
-                    {
-                        for (int column = 0; column < 3; column++)
-                        {
-                            if (string.IsNullOrWhiteSpace(individualBoard.GetCell(row, column)))
-                            {
-                                return new NotaktoMove(-1, row, (boardIndex * 3) + column, "X", currentPlayer);
-                            }
-                        }
-                    }
-                }
+                Random random = new Random();
+                List<int> indexList = Enumerable.Range(0, 27).ToList(); // First, make a list of 27 numbers
+                indexList.OrderBy(_ => random.Next()).ToList(); // Randomly order the list.
+                NotaktoMove smartMove = AvoidLosing(indexList, compositeBoard);
+                if (smartMove != null) return smartMove;
+                NotaktoMove forcedMove = ForcefullyLoseIfNoOption(indexList, compositeBoard);
+                if (forcedMove != null) return forcedMove;
                 return null;
             }
             else
@@ -44,6 +37,53 @@ namespace BaseGame
                 if (boardIndex < 0 || boardIndex > 2 || row < 0 || row > 2 || column < 0 || column > 2) return null;
                 return new NotaktoMove(-1, row, boardIndex * 3 + column, "X", currentPlayer);
             }
+        }
+
+        private NotaktoMove ForcefullyLoseIfNoOption(List<int> indexList, CompositeNotaktoBoard compositeBoard)
+        {
+            foreach (int index in indexList) // When all safe moves are not possible repeat and forcefully enter in the losing cell to lose the game.
+            {
+                int boardIndex = index / 9;
+                int cellIndex = index % 9;
+                int rowIndex = cellIndex / 3;
+                int colIndex = cellIndex % 3;
+
+                var board = compositeBoard.Boards[boardIndex];
+
+                if (board.IsCompleted() || !string.IsNullOrWhiteSpace(board.GetCell(rowIndex, colIndex)))
+                    continue;
+
+                return new NotaktoMove(-1, rowIndex, (boardIndex * 3) + colIndex, "X", currentPlayer);
+            }
+            return null;
+        }
+
+        private NotaktoMove AvoidLosing(List<int> indexList, CompositeNotaktoBoard compositeBoard)
+        {
+            foreach (int index in indexList)
+            {
+                int boardIndex = index / 9;
+                int cellIndex = index % 9;
+                int rowIndex = cellIndex / 3;
+                int colIndex = cellIndex % 3;
+
+                var board = compositeBoard.Boards[boardIndex];
+
+                if (board.IsCompleted() || !string.IsNullOrWhiteSpace(board.GetCell(rowIndex, colIndex)))
+                    continue;
+
+                board.SetCell(rowIndex, colIndex, "X"); // setting cell just to simulate what would happen.
+
+                bool willLose = board.IsCompleted(); // if the board gets completed it will make the ai lose.
+
+                board.SetCell(rowIndex, colIndex, ""); // Undoing the cell simulation setting.
+
+                if (!willLose)
+                {
+                    return new NotaktoMove(-1, rowIndex, (boardIndex * 3) + colIndex, "X", currentPlayer);
+                }
+            }
+            return null;
         }
 
         public NotaktoGame(Player player1, Player player2) : base(GameType.Notakto, new CompositeNotaktoBoard(), new NotaktoGameLogic(), player1, player2)
