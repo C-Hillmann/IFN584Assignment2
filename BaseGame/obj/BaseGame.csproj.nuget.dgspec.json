@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/farihashahrin/Desktop/IFN584_Assessment2/BaseGame/BaseGame.csproj": {}
+    "/Users/farihashahrin/Desktop/IFN584_Assessment2/IFN584Assignment2/BaseGame/BaseGame.csproj": {}
   },
   "projects": {
-    "/Users/farihashahrin/Desktop/IFN584_Assessment2/BaseGame/BaseGame.csproj": {
+    "/Users/farihashahrin/Desktop/IFN584_Assessment2/IFN584Assignment2/BaseGame/BaseGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/farihashahrin/Desktop/IFN584_Assessment2/BaseGame/BaseGame.csproj",
+        "projectUniqueName": "/Users/farihashahrin/Desktop/IFN584_Assessment2/IFN584Assignment2/BaseGame/BaseGame.csproj",
         "projectName": "BaseGame",
-        "projectPath": "/Users/farihashahrin/Desktop/IFN584_Assessment2/BaseGame/BaseGame.csproj",
+        "projectPath": "/Users/farihashahrin/Desktop/IFN584_Assessment2/IFN584Assignment2/BaseGame/BaseGame.csproj",
         "packagesPath": "/Users/farihashahrin/.nuget/packages/",
-        "outputPath": "/Users/farihashahrin/Desktop/IFN584_Assessment2/BaseGame/obj/",
+        "outputPath": "/Users/farihashahrin/Desktop/IFN584_Assessment2/IFN584Assignment2/BaseGame/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/farihashahrin/.nuget/NuGet/NuGet.Config"

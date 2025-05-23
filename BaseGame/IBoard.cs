@@ -7,6 +7,6 @@
         void SetCell(int row, int col, string value);
         string GetCell(int row, int col);
         void Display(); 
-        IBoard CloneBoard(); // undo/redo: yet to implement
+        IBoard CloneBoard(); // undo/redo
     }
 }
