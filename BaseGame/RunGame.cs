@@ -1,3 +1,5 @@
+using System;
+
 namespace BaseFramework
 {
     class RunGame
@@ -22,11 +24,11 @@ namespace BaseFramework
                 }
                 else if (SaveManager.gameType == BaseGame.GameType.Notakto)
                 {
-                    //selectedGame = new NotaktoGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
+                    selectedGame = new BaseGame.NotaktoGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
                 }
                 else if (SaveManager.gameType == BaseGame.GameType.Gomoku)
                 {
-                    selectedGame = new BaseGame.GomokuGame(SaveManager.board, SaveManager.player1, SaveManager.player2);     //SaveManager.currentPlayer
+                    selectedGame = new BaseGame.GomokuGame(SaveManager.board, SaveManager.player1, SaveManager.player2, SaveManager.currentPlayer);
                 }
                 else
                 {
@@ -76,7 +78,7 @@ namespace BaseFramework
                 }
                 else if (gameChoice == "2")
                 {
-                    //selectedGame = new NotaktoGame();
+                    selectedGame = new BaseGame.NotaktoGame(player1, player2);
                 }
                 else if (gameChoice == "3")
                 {

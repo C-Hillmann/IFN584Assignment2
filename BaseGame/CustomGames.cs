@@ -14,7 +14,7 @@ namespace BaseFramework
             }
             else if (gameType == GameType.Notakto)
             {
-                return null;         //new NotaktoBoard(size);
+                return new CompositeNotaktoBoard();
             }
             else if (gameType == GameType.Gomoku)
             {
