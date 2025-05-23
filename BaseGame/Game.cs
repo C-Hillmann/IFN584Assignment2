@@ -111,7 +111,11 @@ namespace BaseFramework
                         break;
 
                     case "help":
-                        HelpMenu(); break;
+                        HelpMenu();
+                        break;
+
+                    case "exit":
+                        break;
 
                 }
 
