@@ -10,7 +10,7 @@ namespace BaseFramework
 
             if (gameType == GameType.TicTacToe)
             {
-                return null;    //new TicTacToeBoard(size);
+                return new TicTacToeBoard(size);
             }
             else if (gameType == GameType.Notakto)
             {

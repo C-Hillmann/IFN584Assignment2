@@ -1,4 +1,5 @@
 using System;
+using BaseGame;
 
 namespace BaseFramework
 {
@@ -6,7 +7,10 @@ namespace BaseFramework
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the Board Games!");
+            Console.WriteLine();
+            Console.WriteLine("*******************************");
+            Console.WriteLine("* Welcome to the Board Games! *");
+            Console.WriteLine("*******************************");
             Console.WriteLine("Do you want to load a saved game or start a new one?");
             Console.WriteLine("Type 'y' to load a saved game, or 'n' to start a new game.");
 
@@ -20,7 +24,7 @@ namespace BaseFramework
 
                 if (SaveManager.gameType == BaseGame.GameType.TicTacToe)
                 {
-                    //selectedGame = new TicTacToeGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
+                    selectedGame = new BaseGame.TicTacToeGame(SaveManager.board, SaveManager.currentPlayer, SaveManager.player1, SaveManager.player2);
                 }
                 else if (SaveManager.gameType == BaseGame.GameType.Notakto)
                 {
@@ -59,29 +63,52 @@ namespace BaseFramework
                 Player player1;
                 Player player2;
 
-                if (gameMode == GameMode.HumanVsHuman)
-                {
-                    player1 = new Human("Player 1", true);
-                    player2 = new Human("Player 2", false);
-                }
-                else
-                {
-                    player1 = new Human("Player 1", true);
-                    player2 = new Computer("Computer", false); // always computer
-                }
 
 
                 // Game choice
                 if (gameChoice == "1")
                 {
-                    //selectedGame = new TicTacToeGame();
+
+                    if (gameMode == GameMode.HumanVsHuman)
+                    {
+                        player1 = new Human("Player 1", true);
+                        player2 = new Human("Player 2", false);
+                    }
+                    else
+                    {
+                        player1 = new Human("Player 1", true);
+                        player2 = new TicTacToeAi("Computer", false); // always computer
+                    }
+                    selectedGame = BaseGame.TicTacToeGame.CreateNewGame(player1, player2);
                 }
                 else if (gameChoice == "2")
                 {
+
+                    if (gameMode == GameMode.HumanVsHuman)
+                    {
+                        player1 = new Human("Player 1", true);
+                        player2 = new Human("Player 2", false);
+                    }
+                    else
+                    {
+                        player1 = new Human("Player 1", true);
+                        player2 = new Computer("Computer", false); // always computer
+                    }
                     selectedGame = new BaseGame.NotaktoGame(player1, player2);
                 }
                 else if (gameChoice == "3")
                 {
+
+                    if (gameMode == GameMode.HumanVsHuman)
+                    {
+                        player1 = new Human("Player 1", true);
+                        player2 = new Human("Player 2", false);
+                    }
+                    else
+                    {
+                        player1 = new Human("Player 1", true);
+                        player2 = new Computer("Computer", false); // always computer
+                    }
                     selectedGame = new BaseGame.GomokuGame(player1, player2);
                 }
                 else
@@ -93,8 +120,16 @@ namespace BaseFramework
 
             if (selectedGame != null)
             {
-                // Start the game
-                selectedGame.GamePlay();
+                if (selectedGame is BaseGame.TicTacToeGame ticTacToeGame)
+                {
+                    ticTacToeGame.GamePlay();
+                }
+                else
+                {
+                    // Start the game
+                    selectedGame.GamePlay();
+                }
+                
             }
         }
     }
