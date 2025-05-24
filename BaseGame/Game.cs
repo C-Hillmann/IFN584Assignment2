@@ -49,7 +49,7 @@ namespace BaseFramework
             while (!gameLogic.IsGameOver())
             {
                 Console.WriteLine("Press m to make next move, type save to save current game, or type help to view help menu");
-                string input = Console.ReadLine();
+                string input = Console.ReadLine().Trim().ToLower();
 
                 switch (input)
                 {
@@ -115,6 +115,8 @@ namespace BaseFramework
                         break;
 
                     case "exit":
+                        Console.WriteLine("Exiting the game...");
+                        Environment.Exit(0);
                         break;
 
                 }

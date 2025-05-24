@@ -69,23 +69,30 @@ namespace BaseGame
             }
             else
             {
-                // Derive the next move for AI player
-                Move winMove = CheckRows(board);
-                if (winMove == null)
+                Move winMove = null;
+                int maxLength = 4;
+
+                while (winMove == null && maxLength > 0)
                 {
-                    winMove = CheckCols(board);
-                }
-                if (winMove == null)
-                {
-                    winMove = CheckDiagRight(board);
-                }
-                if (winMove == null)
-                { 
-                    winMove = CheckDiagLeft(board);
+                    // Derive the next move for AI player
+                    winMove = CheckRows(board, maxLength);
+                    if (winMove == null)
+                    {
+                        winMove = CheckCols(board, maxLength);
+                    }
+                    if (winMove == null)
+                    {
+                        winMove = CheckDiagRight(board, maxLength);
+                    }
+                    if (winMove == null)
+                    {
+                        winMove = CheckDiagLeft(board, maxLength);
+                    }
+                    maxLength--;
                 }
 
 
-                if (winMove != null) 
+                if (winMove != null)
                 {
                     return winMove;
                 }
@@ -107,17 +114,17 @@ namespace BaseGame
             }
         }
 
-        private Move CheckRows(IBoard board)
+        private Move CheckRows(IBoard board, int maxLength)
         {
             for (int row = 0; row < 15; row++)
             {
-                for (int col = 0; col < 11; col++)
+                for (int col = 0; col < 15 - maxLength; col++)
                 {
                     List<(int, int)> positions = new List<(int, int)>();
 
                     int countAi = 0, emptyCount = 0;
 
-                    for (int k = 0; k < 5; k++)
+                    for (int k = 0; k < maxLength + 1; k++)
                     {
                         string cell = board.GetCell(row, col+ k);
                         positions.Add((row, col + k));
@@ -126,14 +133,13 @@ namespace BaseGame
                         {
                             countAi++;
                         }
-                        else if (cell == null||cell == "")  //cell == " "
+                        else if (cell == null || cell == "")
                         { 
                             emptyCount++;
                         }
                     }
 
-                    //if 4 W's and 1 empty in block of 5
-                    if (countAi == 4 && emptyCount == 1)
+                    if (countAi == maxLength && emptyCount > 0)
                     {
                         foreach (var pos in positions)
                         {
@@ -151,17 +157,17 @@ namespace BaseGame
             return null;
         }
 
-        private Move CheckCols(IBoard board)
+        private Move CheckCols(IBoard board, int maxLength)
         { 
             for(int col = 0; col < 15;col++)
             {
-                for (int row = 0; row < 11; row++)
+                for (int row = 0; row < 15 - maxLength; row++)
                 {
                     List<(int, int)> positions = new List<(int, int)>();
 
                     int countAi = 0, emptyCount = 0;
 
-                    for (int k = 0; k < 5; k++)
+                    for (int k = 0; k < maxLength + 1; k++)
                     {
                         string cell = board.GetCell(row + k, col);
                         positions.Add((row + k, col));
@@ -176,8 +182,7 @@ namespace BaseGame
                         }
                     }
 
-                    //if 4 W's and 1 empty in block of 5
-                    if (countAi == 4 && emptyCount == 1)
+                    if (countAi == maxLength && emptyCount > 0)
                     {
                         foreach (var pos in positions)
                         {
@@ -195,16 +200,16 @@ namespace BaseGame
             return null;
         }
 
-        private Move CheckDiagRight(IBoard board)
+        private Move CheckDiagRight(IBoard board, int maxLength)
         {
-            for (int row = 0; row < 11; row++)
+            for (int row = 0; row < 15 - maxLength; row++)
             {
-                for (int col = 0; col < 11; col++)
+                for (int col = 0; col < 15 - maxLength; col++)
                 {
                     List<(int, int)> positions = new List<(int, int)>();
 
                     int countAi = 0, emptyCount = 0;
-                    for (int k = 0; k < 5; k++)
+                    for (int k = 0; k < maxLength + 1; k++)
                     {
                         string cell = board.GetCell(row + k, col +k);
                         positions.Add((row + k, col+k));
@@ -218,8 +223,7 @@ namespace BaseGame
                             emptyCount++;
                         }
                     }
-                    //if 4 W's and 1 empty in block of 5
-                    if (countAi == 4 && emptyCount == 1)
+                    if (countAi == maxLength && emptyCount > 0)
                     {
                         foreach (var pos in positions)
                         {
@@ -236,20 +240,20 @@ namespace BaseGame
             return null;
         }
 
-        private Move CheckDiagLeft(IBoard board)    //top right to bottom left
+        private Move CheckDiagLeft(IBoard board, int maxLength)    //top right to bottom left
         {
-            for (int row = 0; row < 11; row++)
+            for (int row = 0; row < 15 - maxLength; row++)
             {
-                for (int col = 14; col !< 4; col--)
+                for (int col = 14; col >= 0 + maxLength; col--)
                 {
                     List<(int, int)> positions = new List<(int, int)>();
 
                     int countAi = 0, emptyCount = 0;
 
-                    for (int k = 0; k < 5; k++)
+                    for (int k = 0; k < maxLength + 1; k++)
                     {
-                        string cell = board.GetCell(row - k, col - k);
-                        positions.Add((row - k, col - k));
+                        string cell = board.GetCell(row + k, col - k);
+                        positions.Add((row + k, col - k));
 
                         if (cell == deterimePlayerColour(currentPlayer))
                         {
@@ -260,8 +264,7 @@ namespace BaseGame
                             emptyCount++;
                         }
                     }
-                    //if 4 W's and 1 empty in block of 5
-                    if (countAi == 4 && emptyCount == 1)
+                    if (countAi == maxLength && emptyCount > 0)
                     {
                         foreach (var pos in positions)
                         {
