@@ -29,18 +29,43 @@ namespace BaseGame
         {
             if (currentPlayer is Human)
             {
-                // Ask for the row / col... colour will be from the Player
-                Console.WriteLine("Enter the row and column to place your piece:");
-                string inputValue = Console.ReadLine().Trim();
-                if (!(inputValue.Contains(' ')))
+                while (true)
                 {
-                    return null;
-                }
+                    try
+                    {
+                        // Ask for the row / col... colour will be from the Player
+                        Console.WriteLine("Enter the row (1-15) and column (1-15) with a space inbetween to place your piece:");
+                        string inputValue = Console.ReadLine().Trim();
+                        if (!(inputValue.Contains(' ')))
+                        {
+                            return null;
+                        }
 
-                String[] rowAndColumns = inputValue.Split(' ');
-                int row = Int32.Parse(rowAndColumns[0]) - 1;
-                int column = Int32.Parse(rowAndColumns[1]) - 1;
-                return new Move(row, column, deterimePlayerColour(currentPlayer), currentPlayer);
+                        String[] rowAndColumns = inputValue.Split(' ');
+
+                        if (rowAndColumns.Length != 2)
+                        {
+                            Console.WriteLine("Invalid input, Please enter two numbers with a space between");
+                            continue;
+                        
+                        }
+
+                        int row = Int32.Parse(rowAndColumns[0]) - 1;
+                        int column = Int32.Parse(rowAndColumns[1]) - 1;
+                        if (row < 0 || row >= 15 || column < 0 || column >= 15)
+                        {
+                            Console.WriteLine("Row and Columns must be between 1 and 15");
+                            continue;
+                        }
+
+                        return new Move(row, column, deterimePlayerColour(currentPlayer), currentPlayer);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Invalid input, please enter numeric values");
+                    }
+                
+                }
             }
             else
             {
@@ -101,7 +126,7 @@ namespace BaseGame
                         {
                             countAi++;
                         }
-                        else if (cell == " ")
+                        else if (cell == null||cell == "")  //cell == " "
                         { 
                             emptyCount++;
                         }
@@ -112,7 +137,7 @@ namespace BaseGame
                     {
                         foreach (var pos in positions)
                         {
-                            if (board.GetCell(pos.Item1, pos.Item2) == " ")
+                            if (board.GetCell(pos.Item1, pos.Item2) == null|| board.GetCell(pos.Item1, pos.Item2)=="")
                             {
                                 return new Move(pos.Item1, pos.Item2, deterimePlayerColour(currentPlayer), currentPlayer);
                             }
@@ -145,7 +170,7 @@ namespace BaseGame
                         {
                             countAi++;
                         }
-                        else if (cell == " ")
+                        else if (cell == null || cell == "")
                         {
                             emptyCount++;
                         }
@@ -156,7 +181,7 @@ namespace BaseGame
                     {
                         foreach (var pos in positions)
                         {
-                            if (board.GetCell(pos.Item1, pos.Item2) == " ")
+                            if (board.GetCell(pos.Item1, pos.Item2) == null || board.GetCell(pos.Item1, pos.Item2) == "")
                             {
                                 return new Move(pos.Item1, pos.Item2, deterimePlayerColour(currentPlayer), currentPlayer);
                             }
@@ -188,7 +213,7 @@ namespace BaseGame
                         {
                             countAi++;
                         }
-                        else if (cell == "  ")
+                        else if (cell == null || cell == "")
                         {
                             emptyCount++;
                         }
@@ -198,7 +223,7 @@ namespace BaseGame
                     {
                         foreach (var pos in positions)
                         {
-                            if (board.GetCell(pos.Item1, pos.Item2) == "  ")
+                            if (board.GetCell(pos.Item1, pos.Item2) == null || board.GetCell(pos.Item1, pos.Item2) == "")
                             {
                                 return new Move(pos.Item1, pos.Item2, deterimePlayerColour(currentPlayer), currentPlayer);
                             }
@@ -230,7 +255,7 @@ namespace BaseGame
                         {
                             countAi++;
                         }
-                        else if (cell == "  ")
+                        else if (cell == null || cell == "")
                         {
                             emptyCount++;
                         }
@@ -240,7 +265,7 @@ namespace BaseGame
                     {
                         foreach (var pos in positions)
                         {
-                            if (board.GetCell(pos.Item1, pos.Item2) == "  ")
+                            if (board.GetCell(pos.Item1, pos.Item2) == null || board.GetCell(pos.Item1, pos.Item2) == "")
                             {
                                 return new Move(pos.Item1, pos.Item2, deterimePlayerColour(currentPlayer), currentPlayer);
                             }
